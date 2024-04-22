@@ -26,18 +26,24 @@ public class Main {
         System.out.print("> ");
 
         // Menginput pilihan menu
-        int selectMenu = sc.nextInt();
-        sc.nextLine();
-        switch (selectMenu) {
-            case 1:
+        int selectMenu;
+        try {
+            selectMenu = sc.nextInt(); 
+            sc.nextLine();
+            switch (selectMenu) {
+                case 1:
                 // Membuka Halaman Login
-                showLoginMenu();
-                break;
-            case 2:
+                    showLoginMenu();
+                    break;
+                case 2:
                 // Membuka Halaman Register
-                showRegisterMenu();
-                break;
-            
+                    showRegisterMenu();
+                    break;    
+            }
+            sc.nextLine();
+        } catch (Exception e){
+            System.out.println("Error!");
+            runApp(); // Latihan Nomor 1, Try Catchnya 
         }
     }
 
@@ -90,29 +96,33 @@ public class Main {
         System.out.println("Username");
         System.out.print("> ");
         String username = sc.nextLine();
+        for (User x : listUser){ // Latihan no.3
+            if (x.username.equals(username)){
+                System.out.println("Username Telah Ada! Tolong coba lagi");
+                showRegisterMenu();
+            }
+        }
         System.out.println("Password");
         System.out.print("> ");
         String password = sc.nextLine();
+        // IF Pertama itu latihan no.2
+        if ((password.length() < 3) || (username.length() < 3)){ // Mengapa kurang dari 3? karena kalau dienter maka "\n" yang terinput ke dalamnya
+            System.out.println("Password atau Username tidak boleh kosong!");
+            System.out.println("Registrasi Ulang!");
+            showRegisterMenu();
+        }
+        //IF kedua ini latihan no.4
+        if (password.length() < 8){
+            System.out.println("Password anda kurang dari 8 karakter! Coba lagi!");
+            showRegisterMenu();
+        }
         User user = new User(username, password);
         Profile profile = new Profile();
 
         // Menginput Data Profile
-        System.out.println("Nama Lengkap");
-        System.out.print("> ");
-        String fullName = sc.nextLine();
-        System.out.println("Umur");
-        System.out.print("> ");
-        int age = sc.nextInt();
-        sc.nextLine();
-        System.out.println("Hobby");
-        System.out.print("> ");
-        String hobby = sc.nextLine();
+        inputDataProfile(profile);
 
-        profile.setFullname(fullName);
-        profile.setAge(age);
-        profile.setHobby(hobby);
-
-        String nickname = StringUtils.nickName(fullName);
+        String nickname = StringUtils.nickName(profile.getFullname());
         profile.setNickname(nickname);
         listUser.add(user);
         listUserProfile.add(profile);
@@ -129,5 +139,22 @@ public class Main {
         System.out.println("Hobby          : "+ profile.getHobby());
         System.out.println("-------------------------");
     
+    }
+
+    private static void inputDataProfile(Profile profile){
+        System.out.println("Nama Lengkap");
+        System.out.print("> ");
+        String fullName = sc.nextLine();
+        System.out.println("Umur");
+        System.out.print("> ");
+        int age = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Hobby");
+        System.out.print("> ");
+        String hobby = sc.nextLine();
+        
+        profile.setFullname(fullName);
+        profile.setAge(age);
+        profile.setHobby(hobby);
     }
 }
